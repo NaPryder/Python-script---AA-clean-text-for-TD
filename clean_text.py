@@ -1,8 +1,6 @@
 import re
 import os
 
-
-
 class RawData:
 
     def __init__(self, raw_file) -> None:
@@ -158,8 +156,6 @@ class RawData:
 
             "ThrowAllErrors": "Throw All Errors",
             "CatchAllErrors": "Catch All Errors"
-
-
 
         }
 
@@ -350,7 +346,6 @@ def delete_file(list_file:list):
             pass
 
 if __name__ == '__main__':
-
 
     #assign output filename
     output_filename = r"Test Bot Result.txt"
