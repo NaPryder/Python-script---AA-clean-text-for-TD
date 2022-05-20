@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import re
 import os
 
@@ -352,6 +351,6 @@ if __name__ == '__main__':
 
     #assign output filename
 
-    output_filename = r"AR003-000-Receive_Waste_scrap - Main Task.txt"
+    output_filename = r"Result file name.txt"
     deletingFile = False
 
