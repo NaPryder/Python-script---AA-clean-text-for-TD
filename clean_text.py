@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import re
 import os
 
@@ -354,4 +355,3 @@ if __name__ == '__main__':
     output_filename = r"AR003-000-Receive_Waste_scrap - Main Task.txt"
     deletingFile = False
 
-    main_clean_text(output_filename=output_filename, is_del_file=deletingFile)

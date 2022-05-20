@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Start 
 1 Error handler: Try
 2 Step “Assign  variiables”
@@ -62,3 +63,69 @@ Start
 220 List: Clear all items from $listString$
 221 List: Clear all items from $listString2$
 End 
+=======
+Start 
+1 Error handler: Try
+2 Step “Assign  variiables”
+7 Step “Connect Database”
+10 Step “Check file and folder exists”
+15 Step “Read Master data”
+16 Task Bot: Run “Bots\SSHE Department\SSHE003-ENV_Performance_Report\Sub Task\SSHE003-014-Module_ReadMasterDataE…” and assign output to variable
+17 If string $sRunningStatus_ModuleBot$ Not equal to(≠) “Complete”
+18 Error handler: Throw All Errors
+19 Step “Read PDF”
+20 Loop for each folder and assign folder name to $sVendor$
+21 String: Assign “$sPath_PDF$\$sVendor$” to $sFolder_PDF_by_Vendor$
+25 Loop for each file and assign file name and extension to variables (2)
+29 If string $sExtension.String:lowercase.String:trim$ Equals to(=) “pdf”
+30 Error handler: Try
+31 Step “Get Plant name”
+41 Step “Extract PDF to text file”
+49 Step “Read Structure text”
+58 Step “Read Plain text”
+59 CSV/TXT: Open“$sFileTextFromPDF_PlainText$”
+60 Loop for each row in csv/txt
+61 Loop
+62 String: Assign “$sText_Plain$$sRecordValue$” to $sText_Plain$
+63 String: Assign “$sText_Plain$$String:Enter$” to $sText_Plain$
+64 CSV/TXT: Closecsv/txt “sessionTXT_plain”
+65 Error handler: Catch All Errors
+66 Log to file “,$sBotName$,"Error: $sErrorMessage$",Fail,"At line: $nErrorLine…” to “$sLogFile_Progress$”
+67 Loop: Continue
+68 If string $sVendor.String:trim.String:uppercase$ Equals to(=) “ALS”
+69 Comment “Vendor ALS”
+70 Dictionary: Assign $dictParameterALS$ to $dictParameter$
+71 Step “Split page from text”
+77 Number: Assign 0 to $nPDFPage$
+78 List: Clear all items from $listAlreadyDone_Stack$
+79 Boolean: Assign False to $bExtractComplete$
+80 Loop: For each item in the list
+81 Error handler: Try
+82 Step “Get Stack name”
+101 Step “Check Result position”
+105 Step “Extract sample date”
+121 Step “Extract Flow rate”
+140 Step “Extract Oxygen (%)”
+147 Step “Extract Sulfur Dioxide (ppm)”
+165 Step “Extract Oxides of Nitrogen (ppm)”
+183 Step “Extract Total Suspended Particulate”
+200 Step “Log to Complete”
+205 Error handler: Catch All Errors
+206 Log to file “,$sBotName$,"Extract Vendor:$sVendor$ plant:$sPlant$ file:$sFil…” to “$sLogFile_Progress$”
+207 Loop: Break
+208 Error handler: Finally
+209 Step “Clear variables”
+210 String: Assign “” to $sSampleDate$
+211 String: Assign “” to $sStack$
+212 String: Assign “” to $sFlowRate$
+213 String: Assign “” to $sOxygen$
+214 String: Assign “” to $sSulferDioxide$
+215 String: Assign “” to $sNitrogenOxide$
+216 String: Assign “” to $sTotalParticulate$
+217 Boolean: Assign False to $bFoundSO2$
+218 Boolean: Assign False to $bFoundNOx$
+219 Boolean: Assign False to $bFoundTSP$
+220 List: Clear all items from $listString$
+221 List: Clear all items from $listString2$
+End 
+>>>>>>> 5ce01091d61c768281c81332e30c85e417428431

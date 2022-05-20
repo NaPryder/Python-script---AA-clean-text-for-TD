@@ -1,3 +1,4 @@
+<<<<<<< HEAD
  1. Explore <#/home>
  2. Home <#/dashboard>
  3. Discovery <#/modules/processdiscovery/app>
@@ -442,3 +443,397 @@ End
 
 Action details
 Select an action in the flow or list view to view details
+=======
+ 1. Explore <#/home>
+ 2. Home <#/dashboard>
+ 3. Discovery <#/modules/processdiscovery/app>
+     1. Processes <#/modules/processdiscovery/app/pages/processes>
+     2. Opportunities <#/modules/processdiscovery/app/pages/opportunities>
+ 4. Automation <#/bots/repository>
+ 5.
+    Activity
+
+     1. In progress <#/activity/inprogress>
+     2. Historical <#/activity/historical>
+     3.
+     4. Insights<https://community2.cloud-2.automationanywhere.digital/botinsight/>
+ 6.
+    Manage
+
+     1. Learning Instances
+        <#/modules/cognitive/iqbot/pages/learning-instances>
+     2.
+     3. Devices <#/devices/mydevices>
+     4.
+     5. Global values <#/bots/globalvalues>
+     6. Credentials <#/bots/credentials>
+     7. Packages <#/bots/packages>
+ 7.
+    Administration
+
+     1. Users <#/admin/users>
+
+Nnachai.p@stelligence.com
+
+Upgrade to Enterprise
+<https://info.automationanywhere.com/community-edition-upgrade.html>Advanced automation capabilities to unleash your organization’s full potential.
+SSHE003-050-Read_All_PDF
+
+Assistant
+
+Exit debug
+
+Close
+
+Save
+
+Watched variables (66 of 66)
+Show
+
+Your variables
+
+bExtractComplete
+
+--
+bFoundMonthName
+
+--
+bFoundNOx
+
+--
+bFoundSO2
+
+--
+bFoundStack
+
+--
+bFoundTSP
+
+--
+dictMappingStack
+
+--
+dictMonthName_TH
+
+--
+dictParameter
+
+--
+dictParameterALS
+
+--
+dictParameterSPS
+
+--
+dictParameterTET
+
+--
+dictParameterUAE
+
+--
+dictPlant_by_Stack
+
+--
+listAlreadyDone_Stack
+
+--
+listPDF_Page_PlainText
+
+--
+listPDF_Page_StructureText
+
+--
+listStackName
+
+--
+listString
+
+--
+listString2
+
+--
+nErrorLineNumber
+
+--
+nFindString
+
+--
+nFlowRate
+
+--
+nGetItemFromList
+
+--
+nLenght
+
+--
+nPDFPage
+
+--
+rCsvTxtRow
+
+--
+sBotName
+
+--
+sCheckPlaniText
+
+--
+sDummyCheck_Master
+
+--
+sDummyCheck_Text
+
+--
+sDummyString
+
+--
+sErrorMessage
+
+--
+sExtension
+
+--
+sFileMasterDataEmission
+
+--
+sFilename
+
+--
+sFilePDF
+
+--
+sFile_TempExtractPDF
+
+--
+sFileTextFromPDF_PlainText
+
+--
+sFileTextFromPDF_Structure
+
+--
+sFlowRate
+
+--
+sFolder_PDF_by_Vendor
+
+--
+sLogFile_Error
+
+--
+sLogFile_Progress
+
+--
+sMonthName_EN
+
+--
+sMonthNameTH
+
+--
+sNitrogenOxide
+
+--
+sOxygen
+
+--
+sPath_Calculating
+
+--
+sPath_PDF
+
+--
+sPlant
+
+--
+sRecordValue
+
+--
+sRegexReplacePattern
+
+--
+sRunningMethod
+
+--
+sRunningStatus
+
+--
+sRunningStatus_ModuleBot
+
+--
+sSampleDate
+
+--
+sStack
+
+--
+sSulferDioxide
+
+--
+sText_PDFEachPage
+
+--
+sText_PDFEachPage_Plain
+
+--
+sText_Plain
+
+--
+sText_Structure
+
+--
+sTotalParticulate
+
+--
+sVendor
+
+--
+
+FlowListDual
+Start
+1
+Error handler: Try
+2
+Step“Assign variiables”
+7
+Step“Connect Database”
+10
+Step“Check file and folder exists”
+15
+Step“Read Master data”
+16
+Task Bot: Run“Bots\SSHE Department\SSHE003-ENV_Performance_Report\Sub
+Task\SSHE003-014-Module_ReadMasterDataE…” and assign output to variable
+17
+Ifstring $sRunningStatus_ModuleBot$ Not equal to(≠) “Complete”
+18
+Error handler: ThrowAllErrors
+19
+Step“Read PDF”
+20
+Loopfor each folder and assign folder name to $sVendor$
+21
+String: Assign“$sPath_PDF$\$sVendor$” to $sFolder_PDF_by_Vendor$
+25
+Loopfor each file and assign file name and extension to variables (2)
+29
+Ifstring $sExtension.String:lowercase.String:trim$ Equals to(=) “pdf”
+30
+Error handler: Try
+31
+Step“Get Plant name”
+41
+Step“Extract PDF to text file”
+49
+Step“Read Structure text”
+58
+Step“Read Plain text”
+59
+CSV/TXT: Open“$sFileTextFromPDF_PlainText$”
+60
+Loopfor each row in csv/txt
+61
+Loop
+62
+String: Assign“$sText_Plain$$sRecordValue$” to $sText_Plain$
+63
+String: Assign“$sText_Plain$$String:Enter$” to $sText_Plain$
+64
+CSV/TXT: Closecsv/txt “sessionTXT_plain”
+65
+Error handler: CatchAllErrors
+66
+Log to file“,$sBotName$,"Error: $sErrorMessage$",Fail,"At line:
+$nErrorLine…” to “$sLogFile_Progress$”
+67
+Loop: Continue
+68
+Ifstring $sVendor.String:trim.String:uppercase$ Equals to(=) “ALS”
+69
+Comment“Vendor ALS”
+70
+Dictionary: Assign$dictParameterALS$ to $dictParameter$
+71
+Step“Split page from text”
+77
+Number: Assign0 to $nPDFPage$
+78
+List: Clearall items from $listAlreadyDone_Stack$
+79
+Boolean: AssignFalse to $bExtractComplete$
+80
+Loop: For each item in the list
+81
+Error handler: Try
+82
+Step“Get Stack name”
+101
+Step“Check Result position”
+105
+Step“Extract sample date”
+121
+Step“Extract Flow rate”
+140
+Step“Extract Oxygen (%)”
+147
+Step“Extract Sulfur Dioxide (ppm)”
+165
+Step“Extract Oxides of Nitrogen (ppm)”
+183
+Step“Extract Total Suspended Particulate”
+200
+Step“Log to Complete”
+205
+Error handler: CatchAllErrors
+206
+Log to file“,$sBotName$,"Extract Vendor:$sVendor$ plant:$sPlant$
+file:$sFil…” to “$sLogFile_Progress$”
+207
+Loop: Break
+208
+Error handler: Finally
+209
+Step“Clear variables”
+210
+String: Assign“” to $sSampleDate$
+211
+String: Assign“” to $sStack$
+212
+String: Assign“” to $sFlowRate$
+213
+String: Assign“” to $sOxygen$
+214
+String: Assign“” to $sSulferDioxide$
+215
+String: Assign“” to $sNitrogenOxide$
+216
+String: Assign“” to $sTotalParticulate$
+217
+Boolean: AssignFalse to $bFoundSO2$
+218
+Boolean: AssignFalse to $bFoundNOx$
+219
+Boolean: AssignFalse to $bFoundTSP$
+220
+List: Clearall items from $listString$
+221
+List: Clearall items from $listString2$
+222
+223
+224
+225
+395
+547
+702
+703
+704
+705
+706
+707
+708
+709
+710
+End
+
+Action details
+Select an action in the flow or list view to view details
+>>>>>>> 5ce01091d61c768281c81332e30c85e417428431
