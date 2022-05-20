@@ -125,7 +125,6 @@ class RawData:
             'namesfrom': 'names from',
             'cellvalue': 'cell value',
             'combobox': 'combo box',
-
             "sErrorMess…": "$sErrorMessage$",
             "nErrorLi…": "nErrorLineNumber$",
             'EndTask': "End Task",
@@ -153,7 +152,10 @@ class RawData:
             'Deleteusing': 'Delete using',
             'Activatethe': 'Activate the',
             'rowsfrom' :'rows from',
-
+            'desktopscreenshot': 'desktop screenshot',
+            'windowapplication': 'window application',
+            'Open$': 'Open $',
+            'Loopwhile':'Loop while',
             "ThrowAllErrors": "Throw All Errors",
             "CatchAllErrors": "Catch All Errors"
 
@@ -348,7 +350,8 @@ def delete_file(list_file:list):
 if __name__ == '__main__':
 
     #assign output filename
-    output_filename = r"Test Bot Result.txt"
+
+    output_filename = r"AR003-000-Receive_Waste_scrap - Main Task.txt"
     deletingFile = False
 
     main_clean_text(output_filename=output_filename, is_del_file=deletingFile)

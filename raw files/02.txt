@@ -194,114 +194,53 @@ sStringLog
 FlowListDual
 Start
 1
-Comment“RunProcess = DEV or PRD”
 2
-Error handler: Try
 3
-String: Assign“Start” to $sRunningStatus$
 4
-Step“Update Database”
 5
-Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
-Task\AR003-001-Update_Database” and assign output to variable
 6
-Step“Get start variables”
 7
-Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
-Task\AR003-010-Get_Start_Variables” and assign output to variable
 8
-Ifstring $sRunningStatus_ModuleBot$ Not equal to(≠) “Complete”
 9
-Error handler: ThrowAllErrors
 10
-Log to file“,"$sBotName$","-----Start Task Bot-----",Complete” to
-“$sLogFile_Progress$”
 11
-Comment“Sed email”
 12
-Email: Sendan email to $sEmail_To$ with subject : “[$sRunProcess$] RPA
-Status : [$sBotName$] - Start”
 14
-Step“Download email attachment”
 15
-Log to file“,"$sBotName$","Download email attachment file",Complete” to
-“$sLogFile_Progress$”
 16
-Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
-Task\AR003-010-Email_Downloader_&_Reader” and assign output to variable
 17
-Delay: Add a regular delay of 3 seconds
 18
-Step“Run AR1”
 19
-Log to file“,"$sBotName$","Run AR1",Complete” to “$sLogFile_Progress$”
 20
-Step“Assign initial variables”
 21
-Comment“AR1 variables”
 22
-Boolean: AssignFalse to $bCopiedFileAR1$
 23
-Boolean: AssignFalse to $bUpdatedFileAR1$
 24
-Boolean: AssignFalse to $bFoundLog_FBL3N$
 25
-Boolean: AssignFalse to $bFoundLog_F-29$
 26
-Boolean: AssignFalse to $bFoundLog_FBL5N_AR1$
 27
-Step“Copy file AR1 to temp”
 28
-String: Assign“$sPath_Calculating$\Excel_AR1_Log.xlsx” to
-$sFileExcel_AR1_Process$
 29
-Iffile exists at “$sFileMasterExcel_AR1$”
 30
-File: Copy“$sFileMasterExcel_AR1$” to $sFileExcel_AR1_Process$
 31
-Boolean: AssignTrue to $bCopiedFileAR1$
 32
-Wait for conditionfile exists at “$sFileExcel_AR1_Process$”
 33
-Log to file“,"$sBotName$","Copy file master excel log
-AR1:$sFileMasterExcel…” to “$sLogFile_Progress$”
 34
-If: Else
 35
-Error handler: ThrowAllErrors
 36
-Step“Check transfer amount FBL3N”
 37
-Log to file“,"$sBotName$","AR1 Check FBL3N Start",Complete” to
-“$sLogFile_Progress$”
 38
-Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
-Task\AR003-030-Check_Transfer_Amount” and assign output to variable
 39
-Ifstring $sRunningStatus_ModuleBot$ Not equal to(≠) “Complete”
 40
-Error handler: ThrowAllErrors
 41
-Boolean: AssignTrue to $bUpdatedFileAR1$
 42
-Step“Get not found content”
 43
-String: Assign“” to $sContent_NotFoundFBL3N$
 44
-Loop: For each item in the list
 45
-Boolean: AssignTrue to $bFoundLog_FBL3N$
 46
-String: Assign“$sContent_NotFoundFBL3N$<li>$sStringLog$</li>” to
-$sContent_NotFoundFBL3N$
 47
-Log to file“,"$sBotName$","AR1 Check FBL3N Log: $sStringLog$",Complete”
-to “$sLogFile_Progress$”
 48
-Step“Post to F-29”
 49
-Log to file“,"$sBotName$","AR1 Post F-29 Start",Complete” to
-“$sLogFile_Progress$”
 50
 Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
 Task\AR003-040-Post_Receive_Deposit” and assign output to variable
@@ -310,55 +249,119 @@ Ifstring $sRunningStatus_ModuleBot$ Not equal to(≠) “Complete”
 52
 Error handler: ThrowAllErrors
 53
+Step“Get not found content”
 54
+String: Assign“” to $sContent_NotFoundF-29$
 55
+Loop: For each item in the list
 56
+Boolean: AssignTrue to $bFoundLog_F-29$
 57
+String: Assign“$sContent_NotFoundF-29$<li>$sStringLog$</li>” to
+$sContent_NotFoundF-29$
 58
+Log to file“,"$sBotName$","AR1 Post F-29 Log: $sStringLog$",Complete” to
+“$sLogFile_Progress$”
 59
+Step“Check Balance FBL5N part AR1”
 60
+Log to file“,"$sBotName$","AR1 Check FBL5N Start",Complete” to
+“$sLogFile_Progress$”
 61
+Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
+Task\AR003-050-Get_Balance_From_SAP” and assign output to variable
 62
+Ifstring $sRunningStatus_ModuleBot$ Not equal to(≠) “Complete”
 63
+Error handler: ThrowAllErrors
 64
+Step“Get not found content”
 65
+String: Assign“” to $sContent_NotFoundFBL5N$
 66
+Loop: For each item in the list
 67
+Boolean: AssignTrue to $bFoundLog_FBL5N_AR1$
 68
+String: Assign“$sContent_NotFoundFBL5N$<li>$sStringLog$</li>” to
+$sContent_NotFoundFBL5N$
 69
+Log to file“,"$sBotName$","AR1 Check FBL5N Log: $sStringLog$",Complete”
+to “$sLogFile_Progress$”
 70
+Step“Run AR2”
 71
+Log to file“,"$sBotName$","Run AR2",Complete” to “$sLogFile_Progress$”
 72
+Step“Assign initial variables”
 73
+Comment“AR2 variables”
 74
+Boolean: AssignFalse to $bCopiedFileAR2$
 75
+Boolean: AssignFalse to $bUpdatedFileAR2$
 76
+Boolean: AssignFalse to $bFoundLog_MappingAR1$
 77
+Boolean: AssignFalse to $bFoundLog_F-30$
 78
+Boolean: AssignFalse to $bFoundLog_FBL5N_AR2$
 79
+Boolean: AssignFalse to $bFoundLog_CreatePV-Report$
 80
+Step“Copy file AR2 to temp”
 81
+String: Assign“$sPath_Calculating$\Excel_AR2_Log.xlsx” to
+$sFileExcel_AR2_Process$
 82
+Iffile exists at “$sFileMasterExcel_AR2$”
 83
+File: Copy“$sFileMasterExcel_AR2$” to $sFileExcel_AR2_Process$
 84
+Boolean: AssignTrue to $bCopiedFileAR2$
 85
+Wait for conditionfile exists at “$sFileExcel_AR2_Process$”
 86
+Log to file“,"$sBotName$","Copy file master excel log
+AR2:$sFileMasterExcel…” to “$sLogFile_Progress$”
 87
+If: Else
 88
+Error handler: ThrowAllErrors
 89
+Step“Check Balance FBL5N part AR2”
 90
+Log to file“,"$sBotName$","AR2 Check FBL5N Start",Complete” to
+“$sLogFile_Progress$”
 91
+Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
+Task\AR003-050-Get_Balance_From_SAP” and assign output to variable
 92
+Ifstring $sRunningStatus_ModuleBot$ Not equal to(≠) “Complete”
 93
+Error handler: ThrowAllErrors
 94
+Step“Get not found content”
 95
+String: Assign“” to $sContent_NotFoundFBL5N_AR2$
 96
+Loop: For each item in the list
 97
+Boolean: AssignTrue to $bFoundLog_FBL5N_AR2$
 98
+String: Assign“$sContent_NotFoundFBL5N_AR2$<li>$sStringLog$</li>” to
+$sContent_NotFoundFBL5N_AR2$
 99
+Log to file“,"$sBotName$","AR2 Check FBL5N Log: $sStringLog$",Complete”
+to “$sLogFile_Progress$”
 100
+Step“Mapping AR1 data”
 101
+Log to file“,"$sBotName$","AR2 Mapping AR1 Data Start",Complete” to
+“$sLogFile_Progress$”
 102
+Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
+Task\AR003-060-Mapping_AR1_Data” and assign output to variable
 103
 104
 105

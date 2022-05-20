@@ -1,0 +1,459 @@
+ 1. Explore <#/home>
+ 2. Home <#/dashboard>
+ 3. Discovery <#/modules/processdiscovery/app>
+     1. Processes <#/modules/processdiscovery/app/pages/processes>
+     2. Opportunities <#/modules/processdiscovery/app/pages/opportunities>
+ 4. Automation <#/bots/repository>
+ 5.
+    Activity
+
+     1. In progress <#/activity/inprogress>
+     2. Historical <#/activity/historical>
+     3.
+     4. Insights<https://community2.cloud-2.automationanywhere.digital/botinsight/>
+ 6.
+    Manage
+
+     1. Learning Instances
+        <#/modules/cognitive/iqbot/pages/learning-instances>
+     2.
+     3. Devices <#/devices/mydevices>
+     4.
+     5. Global values <#/bots/globalvalues>
+     6. Credentials <#/bots/credentials>
+     7. Packages <#/bots/packages>
+ 7.
+    Administration
+
+     1. Users <#/admin/users>
+
+Nnachai.p@stelligence.com
+
+Upgrade to Enterprise
+<https://info.automationanywhere.com/community-edition-upgrade.html>Advanced automation capabilities to unleash your organization’s full potential.
+AR003-000-Receive_Waste_scrap - Main Task
+
+Assistant
+
+Exit debug
+
+Close
+
+Save
+
+Watched variables (48 of 49)
+Show
+
+Your variables
+
+bCopiedFileAR1
+
+--
+bCopiedFileAR2
+
+--
+bFoundLog_CreatePV-Report
+
+--
+bFoundLog_F-29
+
+--
+bFoundLog_F-30
+
+--
+bFoundLog_FBL3N
+
+--
+bFoundLog_FBL5N_AR1
+
+--
+bFoundLog_FBL5N_AR2
+
+--
+bFoundLog_MappingAR1
+
+--
+bUpdatedFileAR1
+
+--
+bUpdatedFileAR2
+
+--
+dateTodayDate
+
+--
+listCannotCreatePV-Report
+
+--
+listNotErrorData
+
+--
+listNotFoundData_FBL3N
+
+--
+listNotPost_F-29
+
+--
+listNotPost_F-30
+
+--
+listSkipCheckFBL5N
+
+--
+listSkipCheckFBL5N_AR2
+
+--
+nErrorLineNumber
+
+--
+sBotName
+
+--
+sContent_Log
+
+--
+sContent_NotCreatePV-Report
+
+--
+sContent_NotFoundF-29
+
+--
+sContent_NotFoundF-30
+
+--
+sContent_NotFoundFBL3N
+
+--
+sContent_NotFoundFBL5N
+
+--
+sContent_NotFoundFBL5N_AR2
+
+--
+sContent_NotFound_MappingAR1
+
+--
+sEmail_CC
+
+--
+sEmail_To
+
+--
+sErrorMessage
+
+--
+sFileExcel_AR1_Process
+
+--
+sFileExcel_AR2_Process
+
+--
+sFileMasterActionItems
+
+--
+sFileMasterExcel_AR1
+
+--
+sFileMasterExcel_AR2
+
+--
+sLogFile_Error
+
+--
+sLogFile_Progress
+
+--
+sPath_Calculating
+
+--
+sPath_LogError
+
+--
+sPath_LogProgress
+
+--
+sPath_Output_folder
+
+--
+sPath_SAPLogon
+
+--
+sRunningStatus
+
+--
+sRunningStatus_ModuleBot
+
+--
+sRunProcess
+
+--
+sStringLog
+
+--
+
+FlowListDual
+Start
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+Boolean: AssignTrue to $bFoundLog_CreatePV-Report$
+132
+String: Assign“$sContent_NotCreatePV-Report$<li>$sStringLog$</li>” to
+$sContent_NotCreatePV-Report$
+133
+Log to file“,"$sBotName$","AR2 Create PV report Log:
+$sStringLog$",Complete” to “$sLogFile_Progress$”
+134
+String: Assign“Complete” to $sRunningStatus$
+135
+Error handler: CatchAllErrors
+136
+String: Assign“Fail” to $sRunningStatus$
+137
+Log to file“,"$sBotName$","Error: $sErrorMessage$",Fail,"At line:
+$nErrorLi…” to “$sLogFile_Progress$”
+138
+Log to file“,"$sBotName$","Error: $sErrorMessage$",Fail,"At line:
+$nErrorLi…” to “$sLogFile_Error$”
+139
+Error handler: Finally
+140
+Step“Copy file AR1 back to path master”
+141
+Comment“File AR1 in calculating path exist And File AR1 was copied And
+FIle AR1 Was updated”
+142
+If( file exists at “$sFileExcel_AR1_Process$” ) and ( boolean
+$bUpdatedFileAR1$ Equals to(=) True ) and ( boolean $bCopiedFileAR1$
+Equals to(=) True )
+143
+File: Copy“$sFileExcel_AR1_Process$” to $sFileMasterExcel_AR1$
+144
+Delay: Add a regular delay of 1 seconds
+145
+Log to file“,"$sBotName$","Copy Temp master AR1 back to master
+folder",Comp…” to “$sLogFile_Progress$”
+146
+Step“Copy file AR2 back to path master”
+147
+Comment“File AR2in calculating path exist And File AR2 was copied And
+FIle AR2 Was updated”
+148
+If( file exists at “$sFileExcel_AR2_Process$” ) and ( boolean
+$bUpdatedFileAR2$ Equals to(=) True ) and ( boolean $bCopiedFileAR2$
+Equals to(=) True )
+149
+File: Copy“$sFileExcel_AR2_Process$” to $sFileMasterExcel_AR2$
+150
+Delay: Add a regular delay of 1 seconds
+151
+Log to file“,"$sBotName$","Copy Temp master AR2 back to master
+folder",Comp…” to “$sLogFile_Progress$”
+152
+Step“Get Log email content AR1”
+153
+String: Assign“” to $sContent_Log$
+154
+If( boolean $bFoundLog_FBL3N$ Equals to(=) True ) or ( boolean
+$bFoundLog_F-29$ Equals to(=) True ) or ( boolean $bFoundLog_FBL5N_AR1$
+Equals to(=) True )
+155
+String: Assign“<p><b>Process AR1 Logs</b></p><br>” to $sContent_Log$
+156
+Ifboolean $bFoundLog_FBL3N$ Equals to(=) True
+157
+String: Assign“<p>Record not process in
+FBL3N</p><br><div>$sContent_NotFoundFB…” to $sContent_Log$
+158
+Ifboolean $bFoundLog_F-29$ Equals to(=) True
+159
+String: Assign“<p>Record not process in
+F-29</p><br><div>$sContent_NotFoundF-2…” to $sContent_Log$
+160
+Ifboolean $bFoundLog_FBL5N_AR1$ Equals to(=) True
+161
+String: Assign“<p>Record not process in FBL5N from
+AR1</p><br><div>$sContent_N…” to $sContent_Log$
+162
+String: Assign“$sContent_Log$<br>” to $sContent_Log$
+163
+Step“Get Log email content AR2”
+165
+If( boolean $bFoundLog_FBL5N_AR2$ Equals to(=) True ) or ( boolean
+$bFoundLog_MappingAR1$ Equals to(=) True ) or ( boolean $bFoundLog_F-30$
+Equals to(=) True ) or ( boolean $bFoundLog_CreatePV-Report$ Equals
+to(=) True )
+166
+String: Assign“$sContent_Log$<p><b>Process AR2 Logs</b></p><br>” to
+$sContent_Log$
+167
+Ifboolean $bFoundLog_FBL5N_AR2$ Equals to(=) True
+168
+String: Assign“<p>Record not process in FBL5N from
+AR2</p><br><div>$sContent_N…” to $sContent_Log$
+169
+Ifboolean $bFoundLog_MappingAR1$ Equals to(=) True
+170
+String: Assign“<p>Record not process in Mapping
+data</p><br><div>$sContent_Not…” to $sContent_Log$
+171
+Ifboolean $bFoundLog_F-30$ Equals to(=) True
+172
+String: Assign“<p>Record not process in
+F-30</p><br><div>$sContent_NotFoundF-3…” to $sContent_Log$
+173
+Ifboolean $bFoundLog_CreatePV-Report$ Equals to(=) True
+174
+String: Assign“<p>Record not process in Create PV
+report</p><br><div>$sContent…” to $sContent_Log$
+175
+Step“Send email”
+176
+Ifstring $sRunningStatus$ Equals to(=) “Complete”
+177
+Email: Sendan email to $sEmail_To$ with subject : “[$sRunProcess$] RPA
+Status : [$sBotName$] - Complete”
+178
+If: Else Ifstring $sRunningStatus$ Equals to(=) “Fail”
+179
+Email: Sendan email to $sEmail_To$ with subject : “[$sRunProcess$] RPA
+Status : [$sBotName$] - Fail”
+180
+Step“Update Database”
+181
+Task Bot: Run“Bots\AR Department\AR003-Receive_Waste_scrap\Sub
+Task\AR003-001-Update_Database” and assign output to variable
+182
+Log to file“,"$sBotName$","-----EndTask Bot-----",Complete” to
+“$sLogFile_Progress$”
+End
+
+Action details
+Select an action in the flow or list view to view details

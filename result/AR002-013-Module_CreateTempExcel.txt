@@ -1,0 +1,262 @@
+Start 
+1 Error handler: Try
+2 String: Assign “Start” to $sRunningStatus$
+3 Log to file “,"$sBotName$","-----Start Task Bot-----",Complete” to “$sLogFile_Progress$”
+4 Step “Assign  initial variables”
+5 String: Assign “$sPath_Calculating$\Temp_Copy_$sFileName$.xls” to $sFileCopy$
+6 String: Assign “$sPath_Calculating$\Temp_$sFileName$.xlsx” to $sFileTempExcel$
+7 Step “Convert today date to 1st day of month”
+8 Datetime: To string Convert $dateTodayDate$ and assign result to $sMonth_year$
+9 Datetime: Assign “01-$sMonth_year$” with format “dd-MM-yyyy” to $dateTodayDate$
+10 Datetime: Subtract2 Months from $dateTodayDate$ and assign result to $dateStart$
+11 Datetime: Subtract1 Days from $dateTodayDate$ and assign result to $dateEnd$
+12 Datetime: To string Convert $dateStart$ and assign result to $sDate_Start$
+13 Datetime: To string Convert $dateEnd$ and assign result to $sDate_End$
+14 Datetime: To string Convert $dateEnd$ and assign result to $sDate_End_year-month$
+15 String: To number Convert string “$sDate_End_year-month$01” to a number and assign it to number variable $nDocDate_Start_for_Summary$
+16 String: To number Convert string $sDate_Start$ to a number and assign it to number variable $nDate_Start$
+17 String: To number Convert string $sDate_End$ to a number and assign it to number variable $nDate_End$
+18 Step “Copy file excel”
+19 Log to file “,"$sBotName$","Copy file excel $sFileExcel$ to : $sFileCopy$",C…” to “$sLogFile_Progress$”
+20 File: Copy “$sFileExcel$” to $sFileCopy$
+21 Wait for condition file exists at “$sFileCopy$”
+22 If file does not exist at “$sFileCopy$”
+23 Error handler: Throw All Errors
+24 Step “Clear blank cell and create temp file”
+25 Step “Open copied excel”
+26 Excel advanced: Open“$sFileCopy$”
+27 Wait for window to open with window title “*- Excel”
+28 Window: Maximize the “*- Excel” window
+29 Window: Activate the “*- Excel” window
+30 Log to file “,"$sBotName$","Open excel :$sFileCopy$",Complete” to “$sLogFile_Progress$”
+31 Step “Get header”
+32 Comment “Check header row position”
+33 Boolean: Assign False to $bFoundHeader$
+34 Loop: 10 times
+35 Step “Get Header list”
+42 List: Size of $listHeader$
+43 If number $nSize$ Greater Than (>) 5
+44 Boolean: Assign True to $bFoundHeader$
+45 String: Assign “A$nCounter.Number:toString$” to $sCell_Start$
+46 Number: Assign $nCounter$ to $nRowIndex_Header$
+47 Log to file “,"$sBotName$","Found header at index :$nCounter.Number:toString…” to “$sLogFile_Progress$”
+48 Loop: Break
+49 If boolean $bFoundHeader$ Equals to(=) False
+50 Excel advanced: Close
+51 Wait for window to close with window title “*- Excel”
+52 Error handler: Throw All Errors
+53 Step “Get Header column letter”
+54 Comment “get dict column letter = [ "Header name" : Column letter, ... } if header = "" count blank header”
+55 Excel advanced: Select cells/rows/columns: Specific cell $sCell_Start$
+56 Number: Assign 0 to $nCounterBlankColumn$
+57 Loop: $nSizeRow$ times
+58 Excel advanced: Get single cell value of Active cell
+59 Excel advanced: Get column name: of Active cell
+60 If checks value exists in $listHeader$.
+61 Dictionary: Put Variable value at key $sHeader$ in $dictHeaderColumnLetter$
+62 If: Else
+63 Comment “Count blank column”
+64 Number: Increment $nCounterBlankColumn$ by 1 and assign result to a $nCounterBlankColumn$ variable
+65 Log to file “,"$sBotName$","Delete blank cell at column : $sColumnLetter$",C…” to “$sLogFile_Progress$”
+66 If number $nCounter$ Less Than (<) $nSizeRow$
+67 Comment “nCounter < nSize row go to right cell”
+68 Excel advanced: Go to cell: Go to One cell to the right of the current cell
+69 Log to file “,"$sBotName$","Get header column letter: $sCell_Start$ size:$nS…” to “$sLogFile_Progress$”
+70 Step “Delete blank header Column”
+71 Comment “Delete blank column by loop number of blank column loop each cell in header if cell = "" delete column break”
+72 Loop: $nCounterBlankColumn$ times
+73 Excel advanced: Read row From specific cell “A$nRowIndex_Header.Number:toString$” and store values to $listRowDummy$
+74 List: Size of $listHeader$
+75 Excel advanced: Select cells/rows/columns: Specific cell $sCell_Start$
+76 String: Assign “A$nRowIndex_Header.Number:toString$” to $sCell_Start$
+77 Loop: $nSizeRow$ times
+78 Excel advanced: Get single cell value of Active cell
+79 Excel advanced: Get column name: of Active cell
+80 If checks value exists in $listHeader$.
+81 Comment “skip”
+82 Excel advanced: Go to cell: Go to One cell to the right of the current cell
+83 If: Else
+84 Comment “delete entire column and break loop”
+85 Excel advanced: Delete cells: Delete Specific cell and Entire column
+86 Loop: Break
+87 Step “Delete blank header Row”
+88 Log to file “,"$sBotName$","Delete blank row ",Complete” to “$sLogFile_Progress$”
+89 Loop: “$nRowIndex_Header$-1” times
+90 Excel advanced: Delete cells: Delete Specific cell and Entire row
+91 Delay: Add a regular delay of 100 milliseconds
+92 Excel advanced: Close
+93 Wait for window to close with window title “*- Excel”
+94 Step “Create Temp”
+95 Excel advanced: Open“$sFileCopy$”
+96 Wait for window to open with window title “*- Excel”
+97 If file exists at “$sFileTempExcel$”
+98 Log to file “,"$sBotName$","Delete file Temp: $sFileTempExcel$",Complete” to “$sLogFile_Progress$”
+99 File: Delete “$sFileTempExcel$”
+100 Wait for condition file does not exist at “$sFileTempExcel$”
+101 Step “Create header”
+102 Comment “Create header to row 1”
+103 Excel advanced: Create workbook“$sFileTempExcel$” with sheet named as “Temp”
+104 Wait for window to open with window title “*- Excel”
+105 Excel advanced: Select cells/rows/columns: Specific cell “A1”
+106 Log to file “,"$sBotName$","Create header on Temp file",Complete” to “$sLogFile_Progress$”
+107 Number: Assign -1 to $nCounter$
+108 List: Size of $listHeader$
+109 Dictionary: Assign $dictEmpty_number$ to $dictColumnIndex_ConvertDigit$
+110 Loop: For each item in the list
+111 Number: Increment $nCounter$ by 1 and assign result to a $nCounter$ variable
+112 Excel advanced: Set cell: Active cell to $sHeader$
+113 Excel advanced: Get column name: of Active cell
+114 Dictionary: Put Variable value at key $sHeader$ in $dictHeaderColumnLetter_Temp$
+115 Number: Assign $nCounter$ to $nIndex$
+116 Excel advanced: Get column name: of Active cell
+117 Step “Get clean digit column”
+118 If string $sHeader.String:trim$ Equals to(=) “เลขที่”
+119 Comment “เลขที่ use 8 digits”
+120 Number: Assign 8 to $nMaxDigit$
+121 Dictionary: Put Variable value at key $nIndex.Number:toString$ in $dictColumnIndex_ConvertDigit$
+122 If: Else If ( string $sHeader.String:trim$ Equals to(=) “สำนักงานใหญ่” ) or ( string $sHeader.String:trim$ Equals to(=) “Branch” ) or ( string $sHeader.String:trim$ Equals to(=) “สาขาที่” )
+123 Comment “สำนักงานใหญ่ or สาขาที่ or Branch use 5 digits”
+124 Number: Assign 5 to $nMaxDigit$
+125 Dictionary: Put Variable value at key $nIndex.Number:toString$ in $dictColumnIndex_ConvertDigit$
+126 If: Else If string $sHeader.String:trim$ Equals to(=) “เลขประจำตัวผู้เสียภาษีอากร”
+127 Comment “เลขประจำตัวผู้เสียภาษีอากร use 13 digits”
+128 Number: Assign 13 to $nMaxDigit$
+129 Dictionary: Put Variable value at key $nIndex.Number:toString$ in $dictColumnIndex_ConvertDigit$
+130 If string $sHeader.String:trim$ Equals to(=) “เลขที่เอกสาร”
+131 Comment “Check for consignment”
+132 String: Assign $sColumnLetter$ to $sColumnLetter_FI-Doc$
+133 Number: Assign $nCounter$ to $nIndex_FI-Doc$
+134 Log to file “,"$sBotName$","Found column เลขที่เอกสาร at cell: $sColumnLette…” to “$sLogFile_Progress$”
+135 If: Else If string $sHeader.String:trim$ Equals to(=) “Sold to Party”
+136 Comment “Check for consignment”
+137 String: Assign $sColumnLetter$ to $sColumnLetter_Sold-to-party$
+138 Number: Assign $nCounter$ to $nIndex_Sold-to-Party$
+139 Log to file “,"$sBotName$","Found column Sold to Party at cell: $sColumnLett…” to “$sLogFile_Progress$”
+140 If: Else If string $sHeader.String:trim$ Equals to(=) “วัน/เดือน/ปี”
+141 Comment “Check for filter Doc date”
+142 String: Assign $sColumnLetter$ to $sColumnLetter_DocDate$
+143 Boolean: Assign True to $bCanFilter$
+144 Number: Assign $nCounter$ to $nIndex_DocDate$
+145 Log to file “,"$sBotName$","Found column วัน/เดือน/ปี at column: $sColumnLet…” to “$sLogFile_Progress$”
+146 Dictionary: Put Variable value at key $nIndex.Number:toString$ in $dictHeaderIndex$
+147 If number $nCounter$ Less Than (<) $nSizeRow$
+148 Excel advanced: Go to cell: Go to One cell to the right of the current cell
+149 Delay: Add a regular delay of 80 milliseconds
+150 Log to file “,"$sBotName$","Create header size: $nSizeRow.Number:toString$",…” to “$sLogFile_Progress$”
+151 Excel advanced: Close
+152 Wait for window to close with window title “*- Excel”
+153 Step “Add data”
+154 Comment “Add data from input excel (copied) to temp file”
+155 Loop: 3 times
+156 Error handler: Try
+157 Delay: Add a regular delay of 120 milliseconds
+158 Excel basic: Open spreadsheet sheet name “Temp” as a Read-write mode
+159 Number: Assign 1 to $nRowIndex$
+160 Number: Assign 0 to $nCounter$
+161 Delay: Add a regular delay of 120 milliseconds
+162 Loop: For each row in worksheet and assign to $rExcelRow$
+163 Number: Increment $nCounter$ by 1 and assign result to a $nCounter$ variable
+164 If number $nCounter$ Equals to(=) 1
+165 Loop: Continue
+166 Dictionary: Assign $dictEmpty$ to $dictAddData$
+167 Boolean: Assign False to $bFoundValue$
+168 Boolean: Assign True to $bFoundType$
+169 Step “Check Doc date”
+170 If ( boolean $bCanFilter$ Equals to(=) True ) and ( boolean $bFilterDocDate$ Equals to(=) True )
+171 Step “Get doc date”
+172 String: Assign $rExcelRow[$nIndex_DocDate$].String:trim$ to $sDocDate$
+173 Error handler: Try
+174 If string $sDocDate.String:trim$ Equals to(=) “”
+175 Loop: Continue
+176 String: Split $sDocDate$ with delimiter “.” and assign the result to $listString$
+177 List: Get item from position 0 in $listString$
+178 List: Get item from position 1 in $listString$
+179 List: Get item from position 2 in $listString$
+180 String: To number Convert string “$sDocDate_Year$$sDocDate_Month$$sDocDate_Day$” to a number and assign it to number variable $nDocDate$
+181 Error handler: Catch All Errors
+182 Log to file “,"$sBotName$","Check Date :$sDocDate$ error:$sErrorMessage$",Fa…” to “$sLogFile_Progress$”
+183 Loop: Continue
+184 If number $nDocDate$ Greater Than (>) $nDate_End$
+185 Comment “Check Doc date > date end”
+186 Log to file “,"$sBotName$","Check Doc Date :$sDocDate$ at row: $nCounter.Num…” to “$sLogFile_Progress$”
+187 Loop: Continue
+188 If boolean $bFilterForSummaryReport$ Equals to(=) True
+189 Comment “Filter for summary Doc date is only in start month e.g. doc date = 20220409, start month = 202204 if doc date < 20220401 continue”
+190 If number $nDocDate$ Less Than (<) $nDocDate_Start_for_Summary$
+191 Log to file “,"$sBotName$","Filter for summary report Doc Date :$sDocDate$ a…” to “$sLogFile_Progress$”
+192 Loop: Continue
+193 Step “Check consignment”
+194 Comment “if FI doc founded in list exclude fi doc skip record”
+195 If string $sConsignment.String:trim.String:uppercase$ Equals to(=) “Y”
+196 Comment “Check Fi doc”
+197 String: Assign $rExcelRow[$nIndex_FI-Doc$].String:trim$ to $sFI_Doc$
+198 If checks value exists in $listExcludeFI_Doc$.
+199 Log to file “,"$sBotName$","Check consignment FI Doc:$sFI_Doc$ at row: $nCou…” to “$sLogFile_Progress$”
+200 Loop: Continue
+201 If: Else If string $sConsignment.String:trim.String:uppercase$ Equals to(=) “Y-REPORT”
+202 Comment “Check Sold to Party in SAP code”
+203 String: Assign $rExcelRow[$nIndex_Sold-to-Party$].String:trim$ to $sSold-To-Party$
+204 If checks value exists in $listSAPCode$.
+205 Log to file “,"$sBotName$","Check consignment Sold to Party:$sSold-To-Party$…” to “$sLogFile_Progress$”
+206 If: Else
+207 Loop: Continue
+208 If: Else If string $sConsignment.String:trim.String:uppercase$ Equals to(=) “Y-INCLUDE”
+209 Comment “Check if FI-Doc in listIncludeFIDoc add data”
+210 String: Assign $rExcelRow[$nIndex_FI-Doc$].String:trim$ to $sFI_Doc$
+211 If checks value exists in $listIncludeFIDoc$.
+212 Log to file “,"$sBotName$","Check consignment FI Doc:$sFI_Doc$ at row: $nCou…” to “$sLogFile_Progress$”
+213 If: Else
+214 Loop: Continue
+215 Loop: For each key in the dictionary of $dictHeaderIndex$
+216 Dictionary: Get value of the key $sColumnIndex$ from $dictHeaderIndex$
+217 String: Assign $rExcelRow[$sColumnIndex.String:toNumber$].String:trim$ to $sCell_Value$
+220 If string $sCell_Value.String:trim$ Not equal to(≠) “”
+221 Boolean: Assign True to $bFoundValue$
+222 Step “Add 0 before text”
+223 String: Length: Get the length of the $sCell_Value$ string and assign to $nLength$
+224 If ( $sColumnIndex$ exists in dictionary $dictColumnIndex_ConvertDigit$ ) and ( number $nLength$ Greater Than or Equal To(>=) 1 )
+225 Dictionary: Get value of the key $sColumnIndex$ from $dictColumnIndex_ConvertDigit$
+226 If number $nLength$ Less Than (<) $nMaxDigit$
+227 Number: Assign “$nMaxDigit$ - $nLength$” to $nDiff$
+228 String: Assign $sCell_Value$ to $sCell_Value_Dummy$
+229 Loop: $nDiff$ times
+230 String: Assign “0$sCell_Value_Dummy$” to $sCell_Value_Dummy$
+231 String: Assign $sCell_Value_Dummy$ to $sCell_Value$
+232 Dictionary: Put Variable value at key $sColumnLetter_Temp$ in $dictAddData$
+244 If ( boolean $bFoundValue$ Equals to(=) False ) or ( boolean $bFoundType$ Equals to(=) False )
+245 Comment “Not found any value in row index, continue next row”
+246 Loop: Continue
+247 Step “Set cell in Temp file”
+248 Number: Increment $nRowIndex$ by 1 and assign result to a $nRowIndex$ variable
+249 Loop: For each key in the dictionary of $dictAddData$
+250 Comment “Get column letter in temp file set cell to temp file”
+251 Dictionary: Get value of the key $sColumnLetter_Temp$ from $dictAddData$
+252 String: Assign “$sColumnLetter_Temp$$nRowIndex.Number:toString$” to $sCell_Position$
+253 Excel basic: Set cell: Set value of Specific cell $sCell_Position$ to $sCell_Value$
+254 Log to file “,"$sBotName$","Add row : $nRowIndex.Number:toString$",Complete” to “$sLogFile_Progress$”
+255 Loop: Break
+256 Error handler: Catch All Errors
+257 Comment “if error try again (max try 3 times)”
+258 If number $nTryCounter$ Equals to(=) 3
+259 Error handler: Throw All Errors
+260 If: Else
+261 Log to file “,"$sBotName$","Error on create temp file: $sFileName$ $sErrorMe…” to “$sLogFile_Progress$”
+262 Delay: Add a regular delay of 120 milliseconds
+263 Loop: Continue
+264 Error handler: Finally
+265 Error handler: Try
+266 Excel basic: Close
+267 Delay: Add a regular delay of 120 milliseconds
+268 Excel advanced: Close
+269 Wait for window to close with window title “*- Excel”
+270 String: Assign “Complete” to $sRunningStatus$
+271 Error handler: Catch All Errors
+272 String: Assign “Fail” to $sRunningStatus$
+273 Log to file “,"$sBotName$","Error: $sErrorMessage$",Fail,"At line: $nErrorLineNumber$” to “$sLogFile_Progress$”
+274 Error handler: Finally
+275 Error handler: Try
+276 If window exists “*- Excel”
+277 Window: Close the “*- Excel” window
+278 Wait for window to close with window title “*- Excel”
+279 Log to file “,"$sBotName$","-----End Task Bot-----",Complete” to “$sLogFile_Progress$”
+End 

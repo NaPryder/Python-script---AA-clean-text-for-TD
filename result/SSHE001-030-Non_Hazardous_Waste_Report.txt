@@ -1,0 +1,361 @@
+Start 
+1 Error handler: Try
+2 String: Assign “Start” to $sRunningStatus$
+3 Log to file “,$sBotName$,-----Start taskbot-----,Success” to “$sLogFile$”
+4 Datetime: To string Convert $System:Date$ and assign result to $sLogDate$
+5 String: Assign “$sPath_Snapshot$/$sLogDate$_BotError_030_NHZW.jpg” to $sLogScreenshot_ProgressError$
+6 List: Clear all items from $listCannotDownload$
+7 Step “Update database”
+8 Dictionary: Get value of the key “Execution_Type” from $System:AATaskExecutor$
+9 Task Bot: Run “Bots\SSHE Department\SSHE001-Monthly_Report_Waste\Sub Task\SSHE001-001-Update_Database” and assign output to variable
+10 Step “Get Config Xpath”
+11 Task Bot: Run “Bots\SSHE Department\SSHE001-Monthly_Report_Waste\Sub Task\SSHE001-0-Config_XPath_and_Website” and assign output to variable
+12 If string $sRunningStatus_ModuleBot$ Equals to(=) “Complete”
+13 Step “Assign  data”
+14 Dictionary: Get value of the key “login URL” from $dictXPath_NHZW$
+15 Dictionary: Get value of the key “X Path menu on history page” from $dictXPath_NHZW$
+16 Dictionary: Get value of the key “Xpath input login user” from $dictXPath_NHZW$
+17 Dictionary: Get value of the key “Xpath input login password” from $dictXPath_NHZW$
+18 Dictionary: Get value of the key “Xpath input submit” from $dictXPath_NHZW$
+19 Dictionary: Get value of the key “Xpath menu 6th button” from $dictXPath_NHZW$
+20 Dictionary: Get value of the key “Xpath menu 6th button 2” from $dictXPath_NHZW$
+21 Dictionary: Get value of the key “Xpath menu G04” from $dictXPath_NHZW$
+22 Dictionary: Get value of the key “Xpath menu G4.1” from $dictXPath_NHZW$
+23 Dictionary: Get value of the key “Xpath table permit number” from $dictXPath_NHZW$
+24 Dictionary: Get value of the key “Xpath Combobox” from $dictXPath_NHZW$
+25 Dictionary: Get value of the key “Xpath master table HZW” from $dictXPath_NHZW$
+26 Dictionary: Get value of the key “Xpath view all history detail” from $dictXPath_NHZW$
+27 Dictionary: Get value of the key “Xpath input start date” from $dictXPath_NHZW$
+28 Dictionary: Get value of the key “Xpath input end date” from $dictXPath_NHZW$
+29 Dictionary: Get value of the key “Xpath submit btn” from $dictXPath_NHZW$
+30 Dictionary: Get value of the key “Xpath form method” from $dictXPath_NHZW$
+31 Dictionary: Get value of the key “Xpath page number button” from $dictXPath_NHZW$
+32 Dictionary: Get value of the key “Xpath_LogoutBtn” from $dictXPath_NHZW$
+33 If: Else
+34 Error handler: Throw All Errors
+35 Step “Get Data From Web”
+36 Excel basic: Open spreadsheet sheet name “Sheet1” as a Read-only mode
+37 Loop: For each row in worksheet and assign to $rFactoryData$
+38 If ( string $rFactoryData{"Active flag"}$ Equals to(=) “Active” ) and ( string $rFactoryData{User}$ Not equal to(≠) “” ) and ( string $rFactoryData{Password}$ Not equal to(≠) “” ) and ( string $rFactoryData{"Waste Generator ID."}$ Not equal to(≠) “” )
+39 Comment “check in rFactoryRecord if Active flag = Active and User != "" and Password != "" and Waste Generator ID. != ""”
+40 String: Assign $rFactoryData{User}$ to $sWasteGeneratorID$
+41 Error handler: Try
+42 Step “Assign  variable & Log file”
+43 String: Assign $rFactoryData{"Waste Generator ID."}$ to $sFactoryName$
+44 String: Assign “$sPath_Snapshot$/$sLogDate$_Cannot Enter History Page_$sFactory…” to $sLogScreenshot_NotOpenHistoryPage$
+45 String: Assign “$sPath_Snapshot$/$sLogDate$_Cannot get permit number_$sFactoryN…” to $sLogScreenshot_NotGetPermitNumber$
+46 String: Assign “$sPath_Snapshot$/$sLogDate$_MenuError_$sFactoryName$_$sBotFileN…” to $sLogScreenshot_MenuError$
+47 String: Assign “$sPath_Snapshot$/$sLogDate$_LoginError_$sFactoryName$_$sBotFile…” to $sLogScreenshot_LoginError$
+48 String: Assign “$sPath_Snapshot$/$sLogDate$_ProgressError_$sFactoryName$_$sBotF…” to $sLogScreenshot_ProgressError$
+49 Step “check website open”
+50 Error handler: Try
+51 Comment “close website if found”
+52 Number: Assign 0 to $nCounter$
+53 Loop while window exists “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณ โรงงานฯ - Google Chrome”
+54 Number: Increment $nCounter$ by 1 and assign result to a $nCounter$ variable
+55 Error handler: Try
+56 Window: Close the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+57 Wait for window to open with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+58 Error handler: Catch All Errors
+59 Loop: Break
+60 If window exists “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+62 Window: Close the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ” window
+63 Wait for window to close with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ ใช้แล้ว ออกนอกบริเวณโรงงานฯ”
+64 Step “Open Browser”
+65 Browser: Open $sURL_Login$
+66 Wait for window to open with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+67 Delay: Add a regular delay of 250 milliseconds
+68 Window: Activate the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” window
+69 Window: Maximize the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” window
+70 Delay: Add a regular delay of 250 milliseconds
+71 Step “Login”
+72 Comment “enter user password and submit”
+73 Recorder: Capture Set text $rFactoryData{User}$ in textbox in the “การ ดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+75 Recorder: Capture Set text from Credential Vault "[$rFactoryData{Password}$]" in password text in the “การดำเนินการเกี่ยวกับ การนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+76 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+77 Delay: Add a regular delay of 250 milliseconds
+78 Step “G04 NonHazardous Waste”
+79 Wait for condition “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+80 If “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+81 Step “Click tag menu 6.”
+82 Comment “check menu 6. is found”
+83 Log to file “,$sBotName$,$sFactoryName$ Login user:$rFactoryData{User}$ Comp…” to “$sLogFile$”
+84 Delay: Add a regular delay of 250 milliseconds
+85 Loop: 4 times
+86 Error handler: Try
+87 If number $nClickCounter$ Equals to(=) 1
+88 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+89 If: Else If number $nClickCounter$ Equals to(=) 2
+90 Recorder: Capture Click on link “6. การดำเนินการเกี่ยวกับวัสดุที่ไม่ใช้แล้ว (กกอ.)” in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+91 If: Else If number $nClickCounter$ Equals to(=) 3
+92 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+93 If: Else
+94 If “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+95 Simulate keystrokes “[ENTER]” on window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+96 Log to file “,$sBotName$,"Key stroke enter :$sXPath_6thMenu$",Success” to “$sLogFile$”
+97 Log to file “,$sBotName$,Click tag 6th :$sXPath_6thMenu$ at click:$nClickCou…” to “$sLogFile$”
+98 Loop: Break
+99 Error handler: Catch All Errors
+100 Log to file “,$sBotName$,"Error Click tag 6th again:$sErrorMessage$ at XPath…” to “$sLogFile$”
+101 Loop: Continue
+102 Step “Skip pop up”
+103 Error handler: Try
+104 Delay: Add a regular delay of 1 seconds
+105 Simulate keystrokes “[ENTER]” on window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+106 Error handler: Catch All Errors
+107 Mouse: Move: Move the mouse pointer from x:1139 y:239 to x:1305 y:467
+108 Mouse: Click: Perform the Left Button-Click at the x:1330 y:382 co-ordinates
+109 If “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+110 Error handler: Try
+111 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+112 Delay: Add a regular delay of 500 milliseconds
+113 Error handler: Catch All Errors
+114 If “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+115 Simulate keystrokes “[ENTER]” on window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ”
+116 Delay: Add a regular delay of 500 milliseconds
+117 Wait for condition “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+118 If “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+119 Step “Click Menu G04”
+120 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+121 Wait for condition “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+122 If “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+123 Step “Click Menu G4.1”
+124 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+125 Wait for condition “TABLE” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+126 Step “Check Letter Number”
+127 If “COMBOBOX” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+128 Error handler: Try
+129 Recorder: Capture Get number of items from combo box in the “การดำเนินการ เกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window and save as variable '$sTotalLetterNumberItem$'
+130 String: To number Convert string $sTotalLetterNumberItem$ to a number and assign it to number variable $nTotalLetterNumberItem$
+131 Log to file “,$sBotName$,$sFactoryName$ Get all Permit number: $nTotalLetter…” to “$sLogFile$”
+132 If number $nTotalLetterNumberItem$ Greater Than or Equal To(>=) 1
+133 String: Assign “$sPath_Download$/MasterNHZW_$sFactoryName$.csv” to $sNHZWMaster$
+134 If file does not exist at “$sNHZWMaster$”
+135 Log to file “"User","Waste Type","Permit number","Start date","End date","Wa…” to “$sNHZWMaster$”
+136 Boolean: Assign True to $bWriteMaster$
+137 If: Else
+138 Boolean: Assign False to $bWriteMaster$
+139 Loop: $nTotalLetterNumberItem$ times
+140 Step “Extract License Period”
+141 Recorder: Capture Select item with index $nTotalLetterNumberItem$ in combo box in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+142 Recorder: Capture Get selected text from combo box in the “การดำเนินการเกี่ยว กับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window and save as variable '$sLetterNumber$'
+143 Recorder: Capture Get property “HTML InnerText” from table in the “การ ดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window and save as variable '$sLicensePeriod$'
+144 Delay: Add a regular delay of 2 seconds
+145 String: Extract text Source string $sLicensePeriod$: Extract sub-string before “”
+146 String: Extract text Source string $sLicensePeriod$: Extract sub-string before “”
+147 Log to file “,$sBotName$,"$sFactoryName$ collect Permit number:$sLetterNumbe…” to “$sLogFile$”
+148 Step “Get and Write Data to csv”
+149 If boolean $bWriteMaster$ Equals to(=) True
+150 Recorder: Capture Get entire table for table in the “การดำเนินการเกี่ยวกับการ นำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window and save as variable '$tHZWTable$'
+151 Number: Assign 1 to $nTableRowCount$
+152 LoopFor each row in table
+153 If number $nTableRowCount$ Greater Than (>) 1
+154 Step “clean data record”
+155 Comment “add ' (single qoute) before text sMethod”
+156 String: Assign “'$rHZWRecord[3]$” to $sMethod$
+157 Log to file“"$rFactoryData{User}$",NHZW,"$sLetterNumber$","'$sLicenseStartD…” to “$sNHZWMaster$”
+158 Number: Increment $nTableRowCount$ by 1 and assign result to a $nTableRowCount$ variable
+159 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ - Wri…” to “$sLogFile$”
+160 If: Else
+161 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ - Wri…” to “$sLogFile$”
+162 Step “Get all transport history”
+163 String: Assign “$sPath_Download$/HistoryNHZW_$sFactoryName$_$sLetterNumber$.csv” to $sHistoryTransportFile$
+164 If file does not exist at “$sHistoryTransportFile$”
+165 Data Table: Clear contentof data table $tAllHistoryTransport$
+166 If: Else
+167 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ - Wri…” to “$sLogFile$”
+168 Loop: Continue
+169 Step “Click show history”
+170 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+171 Wait for condition( “TEXTBOX” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” exists ) or ( “TEXTBOX” in window “การดำเนินการ เกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists )
+172 If ( “TEXTBOX” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณ โรงงาน…” exists ) or ( “TEXTBOX” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists )
+173 Step “Set text Transport date”
+174 Recorder: Capture Set text $sTransportOut_StartDate$ in textbox in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+175 Recorder: Capture Set text $sTransportOut_EndDate$ in textbox in the “การ ดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+176 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ - Fou…” to “$sLogFile$”
+177 Step “Click Find”
+178 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+179 Wait for condition( “TABLE” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists ) and ( “CLIENT” in window “การดำเนินการเกี่ยวกับ การนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists )
+180 Step “Capture Page button”
+181 List: Clear all items from $listHistoryPageButton$
+182 List: Clear all items from $listPage$
+183 Recorder: Capture Get values of all children from client in the “การดำเนิน การเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window and save as variable '$listHistoryPageButton$'
+184 List: Size of $listHistoryPageButton$
+185 Step “Check button list size and get listPage”
+186 If number $nLengthButtonList$ Less Than or Equal To (<=) 3
+187 Comment “if lenght of button list <= 3 mean found only 1 page assign listPage = [1]”
+188 List: Assign List (1) to $listPage$
+189 If: Else
+190 Comment “if lenght of button list >3 loop in button list to get page number try convert list item to Number add number to listPage catch continue listPage should be [1, 2, 3, ...] following the page found”
+191 Loop: For each item in the list
+192 Error handler: Try
+193 String: To number Convert string $sListItem$ to a number and assign it to number variable $nListItem$
+194 List: Add item $nListItem$ to $listPage$
+195 Error handler: Catch All Errors
+196 Loop: Continue
+197 List: Size of $listPage$
+198 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ - Che…” to “$sLogFile$”
+199 Step “Get table in each page”
+200 Boolean: Assign True to $bNeedHeader$
+201 Loop: For each item in the list
+202 Error handler: Try
+203 Step “click page button”
+204 If number $nSizeListPage$ Greater Than or Equal To(>=) 2
+205 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+206 Wait for window to open with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ”
+207 Error handler: Catch All Errors
+208 Comment “cannot click page button or not found button skip to do next iteration”
+209 Error handler: Finally
+210 Step “Insert Historytable to tAllHistoryTransport”
+211 Step “Prepare data table”
+212 Recorder: Capture Get entire table for table in the “การดำเนินการเกี่ยวกับการ นำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window and save as variable '$tHistoryTransportData$'
+213 Data Table: Get number of rows from data table $tHistoryTransportData$ and assign it to $nTableHistoryRows$
+214 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ page:…” to “$sLogFile$”
+215 Number: Assign 0 to $nTableRowCount$
+216 LoopFor each row in table
+217 Number: Increment $nTableRowCount$ by 1 and assign result to a $nTableRowCount$ variable
+218 If boolean $bNeedHeader$ Equals to(=) True
+219 Comment “insert Header if bNeedHeader = True Then set bNeedHeader = False for skip to add header in next page and continue next iteration”
+220 Data Table: Insert rowinto data table $tAllHistoryTransport$ at last position
+221 Log to file“"$rHistoryTransport[0]$","'$rHistoryTransport[1]$","$rHistoryTr…” to “$sHistoryTransportFile$”
+222 Boolean: Assign False to $bNeedHeader$
+223 If ( number $nTableHistoryRows$ Greater Than (>) 2 ) and ( number $nTableRowCount$ Greater Than (>) 1 ) and ( number $nTableRowCount$ Less Than (<) $nTableHistoryRows$ )
+224 Comment “insert data if tableRow > 2 rows and tableRowCount > 1 for skip header and tableRowCount < total row for skip footer”
+225 Log to file“"'$rHistoryTransport[0]$","'$rHistoryTransport[1]$","$rHistoryT…” to “$sHistoryTransportFile$”
+226 Data Table: Insert rowinto data table $tAllHistoryTransport$ at last position
+227 Data Table: Get number of rows from data table $tAllHistoryTransport$ and assign it to $nAllHistoryTableRows$
+228 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ - Wri…” to “$sLogFile$”
+229 Step “Return menu”
+230 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+231 Wait for condition “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+232 Step “Click Menu G04”
+233 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+234 Wait for condition “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+235 Step “Click Menu G4.1”
+236 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+237 Wait for condition “TABLE” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+238 If: Else
+239 Step “Error not found textbox transport date”
+240 Comment “not found form or textbox Log error and capture screen”
+241 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_NotOpenHistoryPage$”
+242 Screen: Capture window application “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออก นอกบริเวณโรงงาน…” screenshot and save the image to “$sLogScreenshot_NotOpenHistoryPage$”
+243 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ - Not…” to “$sLogFile$”
+244 Log to file “,$sBotName$,"$sFactoryName$ Permit number:$sLetterNumber$ - Not…” to “$sLogFile_Error$”
+245 Step “Add to list not download”
+246 If checks value exists in $listCannotDownload$.
+247 Comment “found waste generator id in list Skip”
+248 If: Else
+249 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+250 If: Else
+251 Error handler: Throw All Errors
+252 Error handler: Catch All Errors
+253 Step “Error on permit number”
+254 Comment “Log error and capture screen”
+255 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_NotGetPermitNumber$”
+256 Screen: Capture window application “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออก นอกบริเวณโรงงาน…” screenshot and save the image to “$sLogScreenshot_NotGetPermitNumber$”
+257 Log to file “,$sBotName$,$sFactoryName$ - $sErrorMessage$,Fail,At line $nErr…” to “$sLogFile$”
+258 Log to file “,$sBotName$,$sFactoryName$ - $sErrorMessage$,Fail,At line $nErr…” to “$sLogFile_Error$”
+259 Step “Add to list not download”
+260 If checks value exists in $listCannotDownload$.
+261 Comment “found waste generator id in list Skip”
+262 If: Else
+263 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+264 If: Else
+265 Step “Not found element”
+266 Comment “Error not found combo box”
+267 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_NotGetPermitNumber$”
+268 Screen: Capture window application “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออก นอกบริเวณโรงงาน…” screenshot and save the image to “$sLogScreenshot_NotGetPermitNumber$”
+269 Log to file “,$sBotName$,$sFactoryName$ - Cannot get permit number,Fail” to “$sLogFile$”
+270 Log to file “,$sBotName$,$sFactoryName$ - Cannot get permit number,Fail” to “$sLogFile_Error$”
+271 Step “Add to list not download”
+272 If checks value exists in $listCannotDownload$.
+273 Comment “found waste generator id in list Skip”
+274 If: Else
+275 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+276 If: Else
+277 Step “No menu G4.1”
+278 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_MenuError$”
+279 Screen: Capture window application “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออก นอกบริเวณโรงงาน…” screenshot and save the image to “$sLogScreenshot_MenuError$”
+280 Log to file “,$sBotName$,$sFactoryName$ - Not found menu G4.1,Fail” to “$sLogFile$”
+281 Log to file “,$sBotName$,$sFactoryName$ - Not found menu G4.1,Fail” to “$sLogFile_Error$”
+282 Step “Add to list not download”
+283 If checks value exists in $listCannotDownload$.
+284 Comment “found waste generator id in list Skip”
+285 If: Else
+286 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+287 If: Else
+288 Step “No menu G04”
+289 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_MenuError$”
+290 Screen: Capture window application “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออก นอกบริเวณโรงงาน…” screenshot and save the image to “$sLogScreenshot_MenuError$”
+291 Log to file “,$sBotName$,$sFactoryName$ - Not found menu G04,Fail” to “$sLogFile$”
+292 Log to file “,$sBotName$,$sFactoryName$ - Not found menu G04,Fail” to “$sLogFile_Error$”
+293 Step “Add to list not download”
+294 If checks value exists in $listCannotDownload$.
+295 Comment “found waste generator id in list Skip”
+296 If: Else
+297 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+298 If: Else
+299 Step “No menu 6.”
+300 Comment “check login and menu 6.”
+301 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_LoginError$”
+302 Screen: Capture window application “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออก นอกบริเวณโรงงาน…” screenshot and save the image to “$sLogScreenshot_LoginError$”
+303 Log to file “,$sBotName$,$sFactoryName$ - Cannot Login,Fail” to “$sLogFile$”
+304 Log to file “,$sBotName$,$sFactoryName$ - Cannot Login,Fail” to “$sLogFile_Error$”
+305 Step “Add to list not download”
+306 If checks value exists in $listCannotDownload$.
+307 Comment “found waste generator id in list Skip”
+308 If: Else
+309 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+310 Error handler: Catch All Errors
+311 Step “Progress Error”
+312 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_ProgressError$”
+313 Screen: Capture window application “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออก นอกบริเวณโรงงาน…” screenshot and save the image to “$sLogScreenshot_ProgressError$”
+314 Log to file “,$sBotName$,$sFactoryName$ - Progress Error $sErrorMessage$,Fai…” to “$sLogFile$”
+315 Log to file “,$sBotName$,$sFactoryName$ - Progress Error $sErrorMessage$,Fai…” to “$sLogFile_Error$”
+316 Error handler: Finally
+317 Step “Logout”
+318 Error handler: Try
+319 Comment “open link main page for find tag logout”
+320 Browser: Open $sURL_Logout$
+321 Wait for condition “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+322 If “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+323 Step “click logout”
+324 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+325 Wait for condition “TEXTBOX” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+326 Log to file “,$sBotName$,$sFactoryName$ - Logout,Success” to “$sLogFile$”
+327 If: Else
+328 Log to file “,$sBotName$,$sFactoryName$ - Not found Logout button ; force lo…” to “$sLogFile$”
+329 Step “Close Browser”
+330 Error handler: Try
+331 If window exists “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+332 Window: Close the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ” window
+334 Wait for window to close with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ ใช้แล้ว ออกนอกบริเวณโรงงานฯ”
+335 Step “Check website open after close browser”
+336 Error handler: Try
+337 Comment “close website if found”
+338 If window exists “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ”
+340 Window: Close the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ” window
+341 Wait for window to close with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ ใช้แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+342 Error handler: Finally
+343 If window does not exist “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณ โรงงานฯ - Google Chrome”
+344 Log to file “,$sBotName$,$sFactoryName$ - Close browser,Success” to “$sLogFile$”
+345 Loop: Continue
+347 If: Else
+348 Log to file “,$sBotName$,$sFactoryName$ - Not match condition: Active accoun…” to “$sLogFile$”
+350 Excel basic: Close
+351 String: Assign “Complete” to $sRunningStatus$
+352 Error handler: Catch All Errors
+353 Comment “high level error”
+354 String: Assign “Fail” to $sRunningStatus$
+356 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_ProgressError$”
+357 Screen: Capture window application “Currently active” screenshot and save the image to “$sLogScreenshot_ProgressError$”
+358 Log to file “,$sBotName$,"Error in high level: $sErrorMessage$ ",Fail,At lin…” to “$sLogFile$”
+359 Log to file “,$sBotName$,"Error in high level: $sErrorMessage$ ",Fail,At lin…” to “$sLogFile_Error$”
+360 Error handler: Finally
+361 Step “Log cannot download USER ID”
+362 Loop: For each item in the list
+363 Log to file “,$sBotName$,"Download NHZW on user $sWasteGeneratorID$",Fail,"e…” to “$sLogFile$”
+364 Step “Update database”
+365 Task Bot: Run “Bots\SSHE Department\SSHE001-Monthly_Report_Waste\Sub Task\SSHE001-001-Update_Database” and assign output to variable
+366 Log to file “,$sBotName$,-----End task bot-----,Success” to “$sLogFile$”
+End 

@@ -1,0 +1,283 @@
+Start 
+1 Error handler: Try
+2 String: Assign “Start” to $sRunningStatus$
+3 Log to file “,$sBotName$,-----Start Sub task bot-----,Success” to “$sLogFile$”
+4 Datetime: To string Convert $System:Date$ and assign result to $sLogDate$
+5 String: Assign “$sPath_Snapshot$/$sLogDate$_BotError_040_ResultLetter.jpg” to $sLogScreenshot_ProgressError$
+6 List: Clear all items from $listCannotDownload$
+7 Step “Update database”
+8 Dictionary: Get value of the key “Execution_Type” from $System:AATaskExecutor$
+9 Task Bot: Run “Bots\SSHE Department\SSHE001-Monthly_Report_Waste\Sub Task\SSHE001-001-Update_Database” and assign output to variable
+10 Step “Get Config Xpath”
+11 Task Bot: Run “Bots\SSHE Department\SSHE001-Monthly_Report_Waste\Sub Task\SSHE001-0-Config_XPath_and_Website” and assign output to variable
+12 If string $sRunningStatus_ModuleBot$ Equals to(=) “Complete”
+13 Step “Assign  data”
+14 Dictionary: Get value of the key “login URL” from $dictXPath_ResultLetter$
+15 Dictionary: Get value of the key “Logout URL” from $dictXPath_ResultLetter$
+16 Dictionary: Get value of the key “Xpath input login user” from $dictXPath_ResultLetter$
+17 Dictionary: Get value of the key “Xpath input login password” from $dictXPath_ResultLetter$
+18 Dictionary: Get value of the key “Xpath input submit” from $dictXPath_ResultLetter$
+19 Dictionary: Get value of the key “Xpath menu 6th button” from $dictXPath_ResultLetter$
+20 Dictionary: Get value of the key “Xpath menu 6th button 2” from $dictXPath_ResultLetter$
+21 Dictionary: Get value of the key “Xpath menu G03” from $dictXPath_ResultLetter$
+22 Dictionary: Get value of the key “Xpath_LogoutBtn” from $dictXPath_ResultLetter$
+23 Dictionary: Get value of the key “Xpath print letter” from $dictXPath_ResultLetter$
+24 Dictionary: Get value of the key “Xpath main table” from $dictXPath_ResultLetter$
+25 Dictionary: Get value of the key “Xpath main approve date on G03” from $dictXPath_ResultLetter$
+26 Dictionary: Get value of the key “Xpath permit number detail” from $dictXPath_ResultLetter$
+27 Dictionary: Get value of the key “Xpath sub table” from $dictXPath_ResultLetter$
+28 If: Else
+29 Error handler: Throw All Errors
+30 Step “Get Data From Web”
+31 Excel basic: Open spreadsheet sheet name “Sheet1” as a Read-only mode
+32 Number: Assign 0 to $nFactoryCounter$
+33 Loop: For each row in worksheet and assign to $rFactoryData$
+34 If ( string $rFactoryData{"Active flag"}$ Equals to(=) “Active” ) and ( string $rFactoryData{User}$ Not equal to(≠) “” ) and ( string $rFactoryData{Password}$ Not equal to(≠) “” ) and ( string $rFactoryData{"Waste Generator ID."}$ Not equal to(≠) “” )
+35 Comment “check in rFactoryRecord if Active flag = Active and User != "" and Password != "" and Waste Generator ID. != ""”
+36 String: Assign $rFactoryData{User}$ to $sWasteGeneratorID$
+37 Number: Increment $nFactoryCounter$ by 1 and assign result to a $nFactoryCounter$ variable
+38 Error handler: Try
+39 Step “Assign  variable & Log file”
+40 String: Assign $rFactoryData{"Waste Generator ID."}$ to $sFactoryName$
+41 String: Assign “$sPath_Snapshot$/$sLogDate$_Cannot Enter History Page_$sFactory…” to $sLogScreenshot_NotOpenHistoryPage$
+42 String: Assign “$sPath_Snapshot$/$sLogDate$_Cannot get permit number_$sFactoryN…” to $sLogScreenshot_NotGetPermitNumber$
+43 String: Assign “$sPath_Snapshot$/$sLogDate$_MenuError_$sFactoryName$_020_HZW.jpg” to $sLogScreenshot_MenuError$
+44 String: Assign “$sPath_Snapshot$/$sLogDate$_LoginError_$sFactoryName$_020_HZW.j…” to $sLogScreenshot_LoginError$
+45 String: Assign “$sPath_Snapshot$/$sLogDate$_ProgressError_$sFactoryName$_020_HZ…” to $sLogScreenshot_ProgressError$
+46 String: Assign “$sPath_Download$/$nFactoryCounter.Number:toString$_G03MainTable…” to $sG03MainTablePath$
+47 String: Assign “$sPath_Download$/$nFactoryCounter.Number:toString$_G03SubTable_…” to $sG03SubTablePath$
+48 Step “Check file maintable and subtable”
+49 If file exists at “$sG03MainTablePath$”
+50 Boolean: Assign False to $bWriteMainTable$
+51 If: Else
+52 Boolean: Assign True to $bWriteMainTable$
+53 If file exists at “$sG03SubTablePath$”
+54 Boolean: Assign False to $bWriteSubTable$
+55 If: Else
+56 Boolean: Assign True to $bWriteSubTable$
+57 If ( boolean $bWriteMainTable$ Equals to(=) False ) and ( boolean $bWriteSubTable$ Equals to(=) False )
+58 Loop: Continue
+59 Step “check website open”
+60 Comment “close website if found”
+61 Error handler: Try
+62 Loop while window exists “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณ โรงงานฯ - Google Chrome”
+63 Error handler: Try
+64 Window: Close the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+65 Wait for window to open with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+66 Error handler: Catch All Errors
+67 Loop: Break
+68 If window exists /iwmb/
+70 Window: Close the /iwmb/ window
+71 Wait for window to close with window title /iwmb/
+72 If window exists “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+73 Window: Close the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ” window
+75 Wait for window to close with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ ใช้แล้ว ออกนอกบริเวณโรงงานฯ”
+76 Step “Open Browser”
+77 Browser: Open $sURL_Login$
+78 Wait for window to open with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+79 Delay: Add a regular delay of 250 milliseconds
+80 Window: Activate the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” window
+81 Window: Maximize the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” window
+82 Delay: Add a regular delay of 250 milliseconds
+83 Step “Login”
+84 Comment “enter user password and submit”
+85 Recorder: Capture Set text $rFactoryData{User}$ in textbox “login” in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+86 Recorder: Capture Set text from Credential Vault "[$rFactoryData{Password}$]" in password text in the “การดำเนินการเกี่ยวกับ การนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+87 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+88 Delay: Add a regular delay of 1 seconds
+89 Step “G03 Check Letter Result”
+90 Wait for condition “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+91 If “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+92 Delay: Add a regular delay of 500 milliseconds
+93 Step “Click tag menu 6.”
+94 Comment “check menu 6. is found”
+95 Log to file “,$sBotName$,$sFactoryName$ Login user:$rFactoryData{User}$ Comp…” to “$sLogFile$”
+96 Delay: Add a regular delay of 250 milliseconds
+97 Loop: 4 times
+98 Error handler: Try
+99 If number $nClickCounter$ Equals to(=) 1
+100 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+101 If: Else If number $nClickCounter$ Equals to(=) 2
+102 Recorder: Capture Click on link “6. การดำเนินการเกี่ยวกับวัสดุที่ไม่ใช้แล้ว (กกอ.)” in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+103 If: Else If number $nClickCounter$ Equals to(=) 3
+104 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+105 If: Else
+106 If “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+107 Simulate keystrokes “[ENTER]” on window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+108 Log to file “,$sBotName$,"Key stroke enter :$sXPath_6thMenu$",Success” to “$sLogFile$”
+109 Log to file “,$sBotName$,Click tag 6th :$sXPath_6thMenu$ at click:$nClickCou…” to “$sLogFile$”
+110 Loop: Break
+111 Error handler: Catch All Errors
+112 Log to file “,$sBotName$,"Error Click tag 6th again:$sErrorMessage$ at XPath…” to “$sLogFile$”
+113 Loop: Continue
+114 Step “Skip pop up”
+115 Error handler: Try
+116 Delay: Add a regular delay of 3 seconds
+117 Simulate keystrokes “[ENTER]” on window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+118 Error handler: Catch All Errors
+119 Mouse: Move: Move the mouse pointer from x:1139 y:239 to x:1305 y:467
+120 Mouse: Click: Perform the Left Button-Click at the x:1330 y:382 co-ordinates
+121 If “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+122 Error handler: Try
+123 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+124 Delay: Add a regular delay of 500 milliseconds
+125 Error handler: Catch All Errors
+126 If “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+127 Simulate keystrokes “[ENTER]” on window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+128 Delay: Add a regular delay of 500 milliseconds
+129 Wait for condition “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+130 If “LINK” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+131 Log to file “,$sBotName$,$sFactoryName$ Click tag 6.,Success” to “$sLogFile$”
+132 Step “Clock menu G03”
+133 Recorder: Capture Click on link in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+134 Delay: Add a regular delay of 1 seconds
+135 Wait for condition “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+136 If “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+137 Log to file “,$sBotName$,$sFactoryName$ Click tag G03,Success” to “$sLogFile$”
+138 Step “Click menu print result letterr”
+139 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+142 Step “Capture Letter Result Table”
+143 If “TABLE” in window /iwmb/ exists
+144 Step “Get Date”
+145 Recorder: Capture Get property “innerHTML” from Label in the /iwmb/ window and save as variable '$sStringDummy$'
+146 String: Replace “&nbsp;” with “” in $sStringDummy$ and assign the result to $sStringDummy$
+147 String: Replace “” with “” in $sStringDummy$ and assign the result to $sStringDummy$
+148 String: Extract text Source string $sStringDummy$: Extract sub-string before “”
+149 String: Extract text Source string $sStringDummy$: Extract sub-string before “”
+150 String: Trim $sPermitNumber_StartDate$ and assign the result to $sPermitNumber_StartDate$
+151 String: Trim $sPermitNumber_EndDate$ and assign the result to $sPermitNumber_EndDate$
+152 Step “Get FactoryID”
+153 Recorder: Capture Get property “innerHTML” from Label in the /iwmb/ window and save as variable '$sStringDummy$'
+154 String: Replace “&nbsp;” with “” in $sStringDummy$ and assign the result to $sStringDummy$
+155 String: Replace “” with “” in $sStringDummy$ and assign the result to $sStringDummy$
+156 String: Extract text Source string $sStringDummy$: Extract sub-string before “”
+157 Step “Get Main table”
+158 If boolean $bWriteMainTable$ Equals to(=) True
+159 Recorder: Capture Get entire table for table in the /iwmb/ window and save as variable '$tG03MainTable$'
+160 Number: Assign 0 to $nCounter$
+161 LoopFor each row in table
+162 Number: Increment $nCounter$ by 1 and assign result to a $nCounter$ variable
+163 If number $nCounter$ Greater Than (>) 1
+164 Log to file“"$rG03MainTableRecord[0]$","$rG03MainTableRecord[1]$","$rG03Mai…” to “$sG03MainTablePath$”
+165 If: Else
+166 Log to file“"$rG03MainTableRecord[0]$","$rG03MainTableRecord[1]$","$rG03Mai…” to “$sG03MainTablePath$”
+167 Log to file “,$sBotName$,"$sFactoryName$ Get main table $sG03MainTablePath$ …” to “$sLogFile$”
+168 If: Else
+169 Log to file “,$sBotName$,"$sFactoryName$ Get main table $sG03MainTablePath$ …” to “$sLogFile$”
+170 Step “Get Sub Table”
+171 If boolean $bWriteSubTable$ Equals to(=) True
+172 If “TABLE” in window /iwmb/ exists
+173 Recorder: Capture Get entire table for table in the /iwmb/ window and save as variable '$tG03SubTable$'
+174 Delay: Add a regular delay of 1 seconds
+175 Log to file “เลขรับที่,วัน/เดือน/ปี,สาระสำคัญของการเปลี่ยนแปลงในหนังสือแจ้งผ…” to “$sG03SubTablePath$”
+176 Data Table: Delete row0 from data table $tG03SubTable$
+177 Number: Assign 0 to $nCounter$
+178 LoopFor each row in table
+179 Number: Increment $nCounter$ by 1 and assign result to a $nCounter$ variable
+180 Log to file“"'$rG03SubTableRecord[0]$","'$rG03SubTableRecord[1]$","$rG03Sub…” to “$sG03SubTablePath$”
+181 Log to file “,$sBotName$,"$sFactoryName$ Get sub table $sG03SubTablePath$ al…” to “$sLogFile$”
+182 If: Else
+183 Step “Add to cannot download list”
+184 If checks value exists in $listCannotDownload$.
+185 Comment “found waste generator id in list Skip”
+186 If: Else
+187 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+188 Log to file “,$sBotName$,"$sFactoryName$ Get sub table $sG03SubTablePath$",F…” to “$sLogFile$”
+189 Log to file “,$sBotName$,"$sFactoryName$ Get sub table $sG03SubTablePath$",F…” to “$sLogFile_Error$”
+190 Error handler: Try
+191 Browser: Go back
+192 If: Else
+193 Log to file “,$sBotName$,"$sFactoryName$ Get file sub table $sG03SubTablePat…” to “$sLogFile$”
+194 If: Else
+195 Step “Add to cannot download list”
+196 If checks value exists in $listCannotDownload$.
+197 Comment “found waste generator id in list Skip”
+198 If: Else
+199 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+200 Log to file “,$sBotName$,"$sFactoryName$ Get main table",Fail,"not found ele…” to “$sLogFile$”
+201 Log to file “,$sBotName$,"$sFactoryName$ Get main table",Fail,"not found ele…” to “$sLogFile_Error$”
+202 Error handler: Throw All Errors
+203 If: Else
+204 Step “Add to cannot download list”
+205 If checks value exists in $listCannotDownload$.
+206 Comment “found waste generator id in list Skip”
+207 If: Else
+208 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+209 Log to file “,$sBotName$,$sFactoryName$ Click tag G03,Fail,"not found elemen…” to “$sLogFile$”
+210 Log to file “,$sBotName$,$sFactoryName$ Click tag G03,Fail,"not found elemen…” to “$sLogFile_Error$”
+211 Error handler: Throw All Errors
+212 If: Else
+213 Step “Add to cannot download list”
+214 If checks value exists in $listCannotDownload$.
+215 Comment “found waste generator id in list Skip”
+216 If: Else
+217 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+218 Log to file “,$sBotName$,"$sFactoryName$ Click tag 6.":Fail,"not found eleme…” to “$sLogFile$”
+219 Log to file “,$sBotName$,"$sFactoryName$ Click tag 6.":Fail,"not found eleme…” to “$sLogFile$”
+220 Error handler: Throw All Errors
+221 If: Else
+222 Step “Add to cannot download list”
+223 If checks value exists in $listCannotDownload$.
+224 Comment “found waste generator id in list Skip”
+225 If: Else
+226 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+227 Log to file “,$sBotName$,"$sFactoryName$ Login user:$rFactoryData{User}$",Fa…” to “$sLogFile$”
+228 Log to file “,$sBotName$,"$sFactoryName$ Login user:$rFactoryData{User}$",Fa…” to “$sLogFile_Error$”
+229 Error handler: Throw All Errors
+230 Error handler: Catch All Errors
+231 Step “Add to cannot download list”
+232 If checks value exists in $listCannotDownload$.
+233 Comment “found waste generator id in list Skip”
+234 If: Else
+235 List: Add item $sWasteGeneratorID$ to $listCannotDownload$
+237 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_ProgressError$”
+238 Screen: Capture window application “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออก นอกบริเวณโรงงาน…” screenshot and save the image to “$sLogScreenshot_ProgressError$”
+239 Log to file “,$sBotName$,"$sFactoryName$ - Progress Error $sErrorMessage$",F…” to “$sLogFile$”
+240 Log to file “,$sBotName$,"$sFactoryName$ - Progress Error $sErrorMessage$",F…” to “$sLogFile_Error$”
+241 Error handler: Finally
+242 Step “Logout”
+243 Error handler: Try
+244 Browser: Open“http://iwmb2.diw.go.th/main.asp”
+245 Wait for condition “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+246 If “BUTTON” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรง งาน…” exists
+247 Recorder: Capture Click on button in the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้ แล้ว ออกนอกบริเวณโรงงาน…” window
+248 Wait for condition “TEXTBOX” in window “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” exists
+249 Log to file “,$sBotName$,$sFactoryName$ - Logout,Success” to “$sLogFile$”
+250 If: Else
+251 Log to file “,$sBotName$,$sFactoryName$ - Not found Logout button ; force lo…” to “$sLogFile$”
+252 Step “Close Browser”
+253 If window exists “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ”
+254 Window: Close the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+255 Wait for window to close with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ ใช้แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+256 If window exists /iwmb/
+257 Window: Close the /iwmb/ window
+258 Wait for window to close with window title /iwmb/
+259 Step “check website open”
+260 Comment “close website if found”
+261 Error handler: Try
+262 If window exists /iwmb/
+263 Window: Close the /iwmb/ window
+264 Wait for window to close with window title /iwmb/
+265 If window exists “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงานฯ”
+266 Window: Close the “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ใช้แล้ว ออกนอกบริเวณโรงงาน…” window
+267 Wait for window to close with window title “การดำเนินการเกี่ยวกับการนำวัสดุที่ไม่ ใช้แล้ว ออกนอกบริเวณโรงงานฯ - Google Chrome”
+269 Loop: Continue
+270 If: Else
+271 Log to file “,$sBotName$,$sFactoryName$ - Not match condition: Active accoun…” to “$sLogFile$”
+273 Excel basic: Close
+274 String: Assign “Complete” to $sRunningStatus$
+275 Error handler: Catch All Errors
+276 Comment “Error in high level”
+277 String: Assign “Fail” to $sRunningStatus$
+279 Screen: Capture desktop screenshot and save the image to “desktop-$sLogScreenshot_ProgressError$”
+280 Screen: Capture window application “Currently active” screenshot and save the image to “$sLogScreenshot_ProgressError$”
+281 Log to file “,$sBotName$,Error in high level: $sErrorMessage$ ,Fail,At line …” to “$sLogFile$”
+282 Log to file “,$sBotName$,Error in high level: $sErrorMessage$ ,Fail,At line …” to “$sLogFile_Error$”
+283 Error handler: Finally
+284 Step “Log Cannot download”
+285 Loop: For each item in the list
+286 Log to file “,$sBotName$,"Download Result Letter G3 on user id $sWasteGenera…” to “$sLogFile$”
+287 Step “Update database”
+288 Task Bot: Run “Bots\SSHE Department\SSHE001-Monthly_Report_Waste\Sub Task\SSHE001-001-Update_Database” and assign output to variable
+289 Log to file “,$sBotName$,-----End Sub task Get G03 data-----,Success” to “$sLogFile$”
+End 
