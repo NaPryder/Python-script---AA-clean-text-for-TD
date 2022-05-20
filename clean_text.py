@@ -353,4 +353,4 @@ if __name__ == '__main__':
 
     output_filename = r"Result file name.txt"
     deletingFile = False
-
+    main_clean_text(output_filename=output_filename, is_del_file=deletingFile)
